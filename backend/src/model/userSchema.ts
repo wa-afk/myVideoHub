@@ -6,7 +6,9 @@ export interface IUser extends Document {
     password: string,
     token?: string,
     uploadCount: Number,
-    downloadCount: Number
+    downloadCount: Number,
+    createdAt: Date,
+    updatedAt: Date
 };
 
 const userSchema= new Schema ({
