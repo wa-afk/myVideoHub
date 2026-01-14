@@ -6,7 +6,7 @@ const SignIn: React.FC = () => {
   return <Layout>
     <div className='flex items-center justify-center p-4 w-full'>
         <div className='w-full max-w-md bg-white rounded-lg shadow-lg p-6'>
-            <h1 className='text-3xl font-bold text-center text-gray-800 mb-6'>Join Us Today</h1>
+            <h1 className='text-3xl font-bold text-center text-gray-800 mb-6'>Welcome Back</h1>
             <form className='space-y-7'>
                 <div>
                     <label className='block text-sm font-medium text-gray-700'>
@@ -23,9 +23,12 @@ const SignIn: React.FC = () => {
                 <button type='submit' className={`w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center`}>
                 Sign In
                 </button>
-                <Link to={'/sign-up'} className='text-sm font-medium text-indigo-600 hover:text-indigo-500 transtion-all duration-300'>
-                Sign up for free
-                </Link>
+                <div className='flex items-center justify-center gap-2'>
+                    <p className='text-sm font-medium text-gray-500'>Don't have an account?</p>
+                    <Link to={'/sign-up'} className='text-sm font-medium text-indigo-600 hover:text-indigo-500 transtion-all duration-300'>
+                    Sign up for free
+                    </Link>
+                </div>
             </form>
         </div>
     </div>

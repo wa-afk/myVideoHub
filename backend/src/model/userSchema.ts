@@ -1,14 +1,14 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-    name?: string,
-    email: string,
-    password: string,
-    token?: string,
-    uploadCount: Number,
-    downloadCount: Number,
-    createdAt: Date,
-    updatedAt: Date
+    name?: string;
+    email: string;
+    password: string;
+    token?: string;
+    uploadCount: Number;
+    downloadCount: Number;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 const userSchema= new Schema ({
