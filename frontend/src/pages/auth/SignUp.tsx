@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import Layout from '../../components/Layout'
 import type { AuthFormData } from '../../types';
+import { useDispatch } from 'react-redux';
+import { signUpuser } from '../../reducers/auth/authReducer';
+import type { AppDispatch } from '../../reducers/store';
 
 const SignUp: React.FC = () => {
   const [formData, setFormData]= useState<AuthFormData> ({
@@ -14,9 +17,10 @@ const SignUp: React.FC = () => {
         [name]: value,
     }))
   }
+  const dispatch= useDispatch<AppDispatch>();
   const handleSubmit= async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()                              /*Prevent page refresh on submit*/
-    console.log(formData.email, formData.password)
+    dispatch(signUpuser(formData));
   }
   return <Layout>
     <div className='flex items-center justify-center p-4 w-full'>

@@ -44,7 +44,7 @@ export const signInUser: RequestHandler= async (req: RegisterReq, res) => {
             return sendResponse(res, 401, false, 'Invalid credentials');    /*Prevent brute force attacks by vague error message.*/
         }
         const jwtToken= await generateJwtToken(user);
-        return sendResponse(res, 200, true, 'Logged in successfully', {user: jwtToken});
+        return sendResponse(res, 200, true, 'Logged in successfully', {user: {token: jwtToken}});
     } catch (error) {
         console.error(`Error in authentication ${error}`);
         return sendResponse(res, 500, false, 'Internal Server Error');
