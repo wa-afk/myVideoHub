@@ -2,6 +2,22 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import User from '../model/userSchema';
+import { Request, RequestHandler } from 'express';
+import { Types } from 'mongoose';
+
+interface AuthenticatedUser extends Request{
+    user: {
+        _id: Types.ObjectId;
+    }
+};
+
+export type AuthenticatedRequestHandler= RequestHandler<
+    any,                   /*Type of dynamic parameter like user/:id*/
+    any,                   /*Type of response body*/
+    any,                   /*Type of request body*/
+    any,                   /*Type of query parameter like user?search="abc*/
+    AuthenticatedUser      /*Locals i.e. values appended in request*/
+>;
 
 dotenv.config();
 const options: StrategyOptions= {

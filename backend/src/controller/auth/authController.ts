@@ -1,9 +1,9 @@
 import { Request, RequestHandler } from "express";
-import User from "../model/userSchema";
-import { sendResponse } from "../utils/sendResponse";
+import User from "../../model/userSchema";
+import { sendResponse } from "../../utils/sendResponse";
 import crypto from 'crypto';
-import { comparePassword, hashPassword } from '../utils/passwordHelper';
-import { generateJwtToken } from "../utils/generateJwtToken";
+import { comparePassword, hashPassword } from '../../utils/passwordHelper';
+import { generateJwtToken } from "../../utils/generateJwtToken";
 import dotenv from 'dotenv';
 dotenv.config();
 
