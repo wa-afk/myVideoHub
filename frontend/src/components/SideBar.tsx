@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import type { AppDispatch } from '../reducers/store';
 import { FaBars, FaCog, FaHome, FaTimes, FaUpload, FaUser, FaVideo } from 'react-icons/fa';
 import { IoIosLogOut } from 'react-icons/io';
+import { fetchUserDetails } from '../reducers/auth/authReducer';
 
 const SideBar: React.FC = () => {
     const [isOpen, setIsOpen]= useState<boolean>(false)
@@ -12,6 +13,9 @@ const SideBar: React.FC = () => {
     const toggleSideBar= () => {
         setIsOpen((prev) => (!prev))
     }
+    useEffect(() => {
+        dispatch(fetchUserDetails())        //displayed in UserProfile page
+    }, [])                                  //dependency array empty so called when component rendered for first time
     // Slidebar and navbar
     return (
         <>
@@ -56,7 +60,7 @@ const SideBar: React.FC = () => {
                         <li>
                             <div className='flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md cursor-pointer'>
                                 <IoIosLogOut size={20} className='mr-3'/>
-                                <span>User Profile</span>
+                                <span>Log Out</span>
                             </div>
                         </li>
                     </ul>

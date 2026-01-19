@@ -1,10 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SideBar from '../../components/SideBar'
+import { useSelector } from 'react-redux'
+import { selectLoggedInUser } from '../../reducers/auth/authReducer'
 
 const UserProfile: React.FC = () => {
+    const loggedInUser= useSelector(selectLoggedInUser)
     const [name, setName]= useState<string>("")
     const [email, setEmail]= useState<string>("")
     const [edit, setEdit]= useState<boolean>(false)
+    useEffect(() => {
+        if(loggedInUser?.name){
+            setName(loggedInUser.name)
+        }
+        if(loggedInUser?.email){
+            setEmail(loggedInUser.email)
+        }
+    }, [loggedInUser])          //called when dependency loggedInUser changed
   return (
     <div className='flex w-full pr-2 h-screen'>
         <SideBar />

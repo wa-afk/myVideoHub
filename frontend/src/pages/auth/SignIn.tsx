@@ -1,12 +1,14 @@
 import  React, { useState } from 'react'
 import Layout from '../../components/Layout'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { AuthFormData } from '../../types'
 import type { AppDispatch } from '../../reducers/store'
-import { useDispatch } from 'react-redux'
-import { signInUser } from '../../reducers/auth/authReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectLoading, signInUser } from '../../reducers/auth/authReducer'
 
 const SignIn: React.FC = () => {
+  const loading= useSelector(selectLoading)
+
   const [formData, setFormData]= useState<AuthFormData> ({
         email: "",
         password: "",
@@ -18,11 +20,13 @@ const SignIn: React.FC = () => {
         [name]: value,
     }))
   }
-  const dispatch= useDispatch<AppDispatch>();
+
+  const dispatch= useDispatch<AppDispatch>()
+  const navigate= useNavigate()
   const handleSubmit= async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()                              /*Prevent page refresh on submit*/
     const {email, password}= formData;
-    dispatch(signInUser({email, password}));
+    dispatch(signInUser({email, password, navigate}))
   }
   return <Layout>
     <div className='flex items-center justify-center p-4 w-full'>
@@ -45,9 +49,17 @@ const SignIn: React.FC = () => {
                     onChange={ handleChange }
                     />
                 </div>
-                <button type='submit' className={`w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center`}>
-                Sign In
+
+                <div className='flex justify-between items-center'>
+                    <Link to='/reset-password' className='text-sm font-medium text-indigo-600 hover:text-indigo-500'>
+                    Forgot your password?
+                    </Link>
+                </div>
+
+                <button type='submit' disabled={ loading } className={`w-full py-3 px-4 bg-green-500 text-white font-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center`}>
+                {loading? "Verifying ...": "Sign In"}
                 </button>
+
                 <div className='flex items-center justify-center gap-2'>
                     <p className='text-sm font-medium text-gray-500'>Don't have an account?</p>
                     <Link to={'/sign-up'} className='text-sm font-medium text-indigo-600 hover:text-indigo-500 transtion-all duration-300'>

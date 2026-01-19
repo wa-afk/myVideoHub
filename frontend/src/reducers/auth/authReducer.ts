@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import backendApi from "../../api/backendApi";
 import { toast } from "sonner";
+import type { NavigateFunction } from "react-router-dom";
 
 interface User {
     _id: string;
@@ -30,6 +31,7 @@ interface signUpPayload {
 interface signInPayload {
     email: string;
     password: string;
+    navigate: NavigateFunction
 };
 
 interface authResponse {
@@ -57,19 +59,43 @@ export const signUpuser= createAsyncThunk<void, signUpPayload, {rejectValue: str
 //string to accept jwt token if successful, store it locally
 export const signInUser= createAsyncThunk<string | null, signInPayload, {rejectValue: string}> ("auth/sign-in-user", async (payload, thunkApi) => {
     try {
-        const {email, password}= payload;
+        const {email, password, navigate}= payload;
         const { data }= await backendApi.post<authResponse>("/api/v1/auth/sign-in",  {email, password});
         if(data.success && data.user?.token) {
             if(data.user) {
                 toast.success(data.message);
                 localStorage.setItem('token', data.user.token);
+                // navigate user to profile automatically
+                navigate('/user/profile');
             }
             return data.user.token || null;
-            // to-do: navigate user to profile
         } else {
             toast.warning(data.message);
         }
         return thunkApi.rejectWithValue(data.message);
+    } catch (error: any) {
+        const errorMessage= error.response?.data?.message || "Something went wrong";
+        toast.error(errorMessage);
+        return thunkApi.rejectWithValue(errorMessage);
+    }
+});
+
+export const fetchUserDetails= createAsyncThunk<User | null, void, {rejectValue: string}>("auth/fetch-user-details", async (_, thunkApi) => {
+    try {
+        const token= localStorage.getItem("token");
+        if(!token){
+            return thunkApi.rejectWithValue("No authorization token found");
+        }
+        const {data}= await backendApi.get("/api/v1/user/profile", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if(data.success){
+            return data.user;
+        } else{
+            return thunkApi.rejectWithValue(data.message);
+        }
     } catch (error: any) {
         const errorMessage= error.response?.data?.message || "Something went wrong";
         toast.error(errorMessage);
@@ -90,10 +116,20 @@ const authSlice= createSlice({
         })
         .addCase(signInUser.rejected, (state) => {
             state.loading= false;
+        })
+        .addCase(fetchUserDetails.pending, (state) => {
+            state.loading= true;
+        })
+        .addCase(fetchUserDetails.fulfilled, (state, action) => {
+            state.loggedInUser= action.payload;
+            state.loading= false;
+        })
+        .addCase(fetchUserDetails.rejected, (state) => {
+            state.loading= false;
         });
     }
 });
 
 export const authReducer= authSlice.reducer;
-export const loggedInUser= (state: RootState) => state.auth.loggedInUser;
-export const loadingUser= (state: RootState) => state.auth.loading;
+export const selectLoggedInUser= (state: RootState) => state.auth.loggedInUser;
+export const selectLoading= (state: RootState) => state.auth.loading;
