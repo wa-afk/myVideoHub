@@ -34,7 +34,7 @@ interface signInPayload {
     navigate: NavigateFunction
 };
 
-interface authResponse {
+export interface AuthResponse {
     success: boolean;
     message: string;
     user?: User;
@@ -45,7 +45,7 @@ interface authResponse {
 // void type as signup request will not receive any data in response on success, reject value can be error message
 export const signUpuser= createAsyncThunk<void, signUpPayload, {rejectValue: string}> ("auth/sign-up-user", async (payload) => {
     try {
-        const { data }= await backendApi.post<authResponse>("/api/v1/auth/sign-up",  payload);
+        const { data }= await backendApi.post<AuthResponse>("/api/v1/auth/sign-up",  payload);
         if(data.success) {
             toast.success(data.message);
         } else {
@@ -60,7 +60,7 @@ export const signUpuser= createAsyncThunk<void, signUpPayload, {rejectValue: str
 export const signInUser= createAsyncThunk<string | null, signInPayload, {rejectValue: string}> ("auth/sign-in-user", async (payload, thunkApi) => {
     try {
         const {email, password, navigate}= payload;
-        const { data }= await backendApi.post<authResponse>("/api/v1/auth/sign-in",  {email, password});
+        const { data }= await backendApi.post<AuthResponse>("/api/v1/auth/sign-in",  {email, password});
         if(data.success && data.user?.token) {
             if(data.user) {
                 toast.success(data.message);
@@ -113,6 +113,13 @@ const authSlice= createSlice({
             state.loggedInUser= null;
             toast.info("Logged out successfully");
             navigate("/sign-in");
+        },
+        updateUser: (state, action) => {
+            const {name, email}= action.payload
+            if(state.loggedInUser){
+                state.loggedInUser.name= name;
+                state.loggedInUser.email= email;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -139,6 +146,6 @@ const authSlice= createSlice({
 });
 
 export const authReducer= authSlice.reducer;
-export const { logOutUser }= authSlice.actions;
+export const { logOutUser, updateUser }= authSlice.actions;
 export const selectLoggedInUser= (state: RootState) => state.auth.loggedInUser;
 export const selectLoading= (state: RootState) => state.auth.loading;

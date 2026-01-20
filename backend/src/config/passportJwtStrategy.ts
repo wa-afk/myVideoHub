@@ -24,7 +24,7 @@ const options: StrategyOptions= {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET_KEY as string,
 };
-passport.use(new Strategy(options, async (jwtPayload, done) => {               /*done middleware*/
+passport.use(new Strategy(options, async (jwtPayload, done) => {               /*done with passport middleware*/
     try {
         const user= await User.findById(jwtPayload._id).select("-password");   /*Dont send password*/
         if(!user){
@@ -36,5 +36,5 @@ passport.use(new Strategy(options, async (jwtPayload, done) => {               /
         return done(error);
     }
 }));
-
+// used like middleware to check authorization before proceeding with requests other than auth
 export default passport;
