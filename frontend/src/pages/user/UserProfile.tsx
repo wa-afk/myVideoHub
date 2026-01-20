@@ -60,7 +60,7 @@ const UserProfile: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex justify-end'>
-                        <button type="button" onClick={(e) => setEdit(!edit)} className='bg-blue-500 text-white
+                        <button type="button" onClick={() => setEdit(!edit)} className='bg-blue-500 text-white
                         py-2 px-4 rounded-md focus:outline-none hover:bg-blue-600'>
                             {edit? "Save": "Edit"}
                         </button>

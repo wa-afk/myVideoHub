@@ -106,7 +106,15 @@ export const fetchUserDetails= createAsyncThunk<User | null, void, {rejectValue:
 const authSlice= createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        logOutUser: (state, action) => {
+            const navigate= action.payload;
+            localStorage.removeItem("token");
+            state.loggedInUser= null;
+            toast.info("Logged out successfully");
+            navigate("/sign-in");
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(signInUser.pending, (state) => {
             state.loading= true;
@@ -131,5 +139,6 @@ const authSlice= createSlice({
 });
 
 export const authReducer= authSlice.reducer;
+export const { logOutUser }= authSlice.actions;
 export const selectLoggedInUser= (state: RootState) => state.auth.loggedInUser;
 export const selectLoading= (state: RootState) => state.auth.loading;

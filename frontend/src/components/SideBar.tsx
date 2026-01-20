@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import type { AppDispatch } from '../reducers/store';
 import { FaBars, FaCog, FaHome, FaTimes, FaUpload, FaUser, FaVideo } from 'react-icons/fa';
 import { IoIosLogOut } from 'react-icons/io';
-import { fetchUserDetails } from '../reducers/auth/authReducer';
+import { fetchUserDetails, logOutUser } from '../reducers/auth/authReducer';
 
 const SideBar: React.FC = () => {
     const [isOpen, setIsOpen]= useState<boolean>(false)
@@ -58,7 +58,8 @@ const SideBar: React.FC = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <div className='flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md cursor-pointer'>
+                            <div className='flex items-center p-3 hover:bg-bgTwo hover:text-gray-900 rounded-md
+                            cursor-pointer' onClick={() => dispatch(logOutUser(navigate))}>
                                 <IoIosLogOut size={20} className='mr-3'/>
                                 <span>Log Out</span>
                             </div>
