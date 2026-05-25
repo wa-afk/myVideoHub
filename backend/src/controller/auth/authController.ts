@@ -64,7 +64,7 @@ export const sendResetPasswordEmail: RequestHandler= async (req, res) => {
             return sendResponse(res, 404, false, "User not found");
         }
         await resetPasswordEmail(user);
-        return sendResponse(res, 204, true, "Check your registered email to reset password");
+        return sendResponse(res, 200, true, "Check your registered email to reset password");
     } catch (error) {
         console.error(`Error in sending reset password email ${error}`);
         return sendResponse(res, 500, false, 'Internal Server Error');
