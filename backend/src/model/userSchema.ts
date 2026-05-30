@@ -5,8 +5,8 @@ export interface IUser extends Document {
     email: string;
     password: string;
     token?: string;
-    uploadCount: Number;
-    downloadCount: Number;
+    uploadCount: number;
+    downloadCount: number;
     createdAt: Date;
     updatedAt: Date;
 };
