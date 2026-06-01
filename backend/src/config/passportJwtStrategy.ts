@@ -19,7 +19,7 @@ export type AuthenticatedRequestHandler= RequestHandler<
     AuthenticatedUser      /*Locals i.e. values appended in request*/
 >;
 
-dotenv.config();
+dotenv.config({ debug: false });
 const options: StrategyOptions= {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET_KEY as string,

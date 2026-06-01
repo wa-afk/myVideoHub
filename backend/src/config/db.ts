@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
-dotenv.config();
+dotenv.config({ debug: false });
 const connectDb= async () => {
     try {
         const dns = require('dns');

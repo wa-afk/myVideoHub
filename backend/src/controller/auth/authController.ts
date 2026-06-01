@@ -6,7 +6,7 @@ import { comparePassword, hashPassword } from '../../utils/passwordHelper';
 import { generateJwtToken } from "../../utils/generateJwtToken";
 import dotenv from 'dotenv';
 import { resetPasswordEmail } from "../../mailer/resetPassword";
-dotenv.config();
+dotenv.config({ debug: false });
 
 interface RegisterReq extends Request{
     body: {

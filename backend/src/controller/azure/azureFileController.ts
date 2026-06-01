@@ -24,12 +24,12 @@ export const uploadFile: RequestHandler = async(req, res) => {
                     if ('key' in videoFile) {
                         const newVideo = await Video.create({
                             title: title || baseName,
-                            description: description? description : null,
+                            description: description? description : undefined,
                             uploadedBy: req.user._id,
                             path: videoFile.location,
                             key: videoFile.key,
                             isPrivate,
-                            thumbnail: thumbnailFile? thumbnailFile.location : null,
+                            thumbnail: thumbnailFile? thumbnailFile.location : undefined,
                         });
                         const user = await User.findById(req.user._id);
                         if (user) {
@@ -41,6 +41,7 @@ export const uploadFile: RequestHandler = async(req, res) => {
                                 _id: newVideo._id,
                                 path: newVideo.path,
                                 title: newVideo.title,
+                                description: newVideo.description,
                                 thumbnail: newVideo.thumbnail,
                                 uploadedBy: {
                                     email: user?.email
@@ -55,6 +56,7 @@ export const uploadFile: RequestHandler = async(req, res) => {
             return sendResponse(res, 404, false, "Not Authorized to upload the video");
         }
     } catch (error) {
+        console.log(error);
         return sendResponse(res, 500, false, "Internal server error");
     }
 };

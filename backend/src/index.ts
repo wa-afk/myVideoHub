@@ -11,7 +11,7 @@ const corsOptions= {
     ],
     optionSuceessStatus: 200,
 }
-dotenv.config();
+dotenv.config({ debug: false });
 const app= express();
 const port= process.env.PORT || 8080;
 connectDb();

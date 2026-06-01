@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import ejs from 'ejs';
 
-dotenv.config();
+dotenv.config({ debug: false });
 export const resetPasswordEmail= async(user: IUser) => {
     try {
         // __dirname for current directory
