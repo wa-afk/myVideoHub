@@ -143,3 +143,39 @@ export const downloadVideo: RequestHandler = async (req,res) => {
         return sendResponse(res, 500, false, "Internal server error");
     }
 };
+
+export const updateVideo: RequestHandler = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return sendResponse(res, 400, false, "No video selected");
+        }
+        const video = await Video.findById(id);
+        if (!video) {
+            return sendResponse(res, 404, false, "Video not found");
+        }
+        Object.assign(video, req.body);
+
+        // Check, Update if new video file is present
+        if (req.files && (req.files as any).video[0]) {
+            const videoFile = (req.files as any).video[0];
+            if ('location' in videoFile && 'key' in videoFile) {
+                video.path = videoFile.location;
+                video.key = videoFile.key;
+            } 
+        }
+
+        // Check, Update if new thumbnail file is present
+        if (req.files && (req.files as any).thumbnail[0]) {
+            const thumbnailFile = (req.files as any).thumbnail[0];
+            if ('location' in thumbnailFile && 'key' in thumbnailFile) {
+                video.thumbnail = thumbnailFile.location;
+            } 
+        }
+        await video.save();
+        sendResponse(res, 200, true, "Video updated successfully", { video });
+    } catch (error) {
+        console.error(`Error in updating video ${error}`);
+        return sendResponse(res, 500, false, "Internal server error");
+    }
+}
