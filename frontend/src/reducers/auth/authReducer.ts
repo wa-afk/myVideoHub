@@ -18,7 +18,7 @@ export interface AuthState {
     loading: boolean;
 };
 
-const initialState: AuthState= {
+const initialState: AuthState = {
     loggedInUser: null,
     loading: false,
 };
@@ -43,10 +43,14 @@ export interface AuthResponse {
 // Signup request to backend (Redux doesn't provide async functions by default)
 // First arg type is not URL or route but similar looking by convention to make it unique
 // void type as signup request will not receive any data in response on success, reject value can be error message
-export const signUpuser= createAsyncThunk<void, signUpPayload, {rejectValue: string}> ("auth/sign-up-user", async (payload) => {
+export const signUpuser = createAsyncThunk<
+  void,
+  signUpPayload,
+  { rejectValue: string }
+>("auth/sign-up-user", async (payload) => {
     try {
-        const { data }= await backendApi.post<AuthResponse>("/api/v1/auth/sign-up",  payload);
-        if(data.success) {
+        const { data } = await backendApi.post<AuthResponse>("/api/v1/auth/sign-up", payload);
+        if (data.success) {
             toast.success(data.message);
         } else {
             toast.warning(data.message);
@@ -57,12 +61,16 @@ export const signUpuser= createAsyncThunk<void, signUpPayload, {rejectValue: str
 });
 
 //string to accept jwt token if successful, store it locally
-export const signInUser= createAsyncThunk<string | null, signInPayload, {rejectValue: string}> ("auth/sign-in-user", async (payload, thunkApi) => {
+export const signInUser = createAsyncThunk<
+  string | null,
+  signInPayload,
+  { rejectValue: string }
+>("auth/sign-in-user", async (payload, thunkApi) => {
     try {
-        const {email, password, navigate}= payload;
-        const { data }= await backendApi.post<AuthResponse>("/api/v1/auth/sign-in",  {email, password});
-        if(data.success && data.user?.token) {
-            if(data.user) {
+        const { email, password, navigate } = payload;
+        const { data } = await backendApi.post<AuthResponse>("/api/v1/auth/sign-in", { email, password });
+        if (data.success && data.user?.token) {
+            if (data.user) {
                 toast.success(data.message);
                 localStorage.setItem('token', data.user.token);
                 // navigate user to profile automatically
@@ -74,78 +82,83 @@ export const signInUser= createAsyncThunk<string | null, signInPayload, {rejectV
         }
         return thunkApi.rejectWithValue(data.message);
     } catch (error: any) {
-        const errorMessage= error.response?.data?.message || "Something went wrong";
+        const errorMessage = error.response?.data?.message || "Something went wrong";
         toast.error(errorMessage);
         return thunkApi.rejectWithValue(errorMessage);
     }
 });
 
-export const fetchUserDetails= createAsyncThunk<User | null, void, {rejectValue: string}>("auth/fetch-user-details", async (_, thunkApi) => {
+export const fetchUserDetails = createAsyncThunk<
+  User | null,
+  void,
+  { rejectValue: string }
+>("auth/fetch-user-details", async (_, thunkApi) => {
     try {
-        const token= localStorage.getItem("token");
-        if(!token){
+        const token = localStorage.getItem("token");
+        if (!token) {
             return thunkApi.rejectWithValue("No authorization token found");
         }
-        const {data}= await backendApi.get("/api/v1/user/profile", {
+        const { data } = await backendApi.get("/api/v1/user/profile", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        if(data.success){
+        if (data.success) {
             return data.user;
-        } else{
+        } else {
+            toast.warning(data.message);
             return thunkApi.rejectWithValue(data.message);
         }
     } catch (error: any) {
-        const errorMessage= error.response?.data?.message || "Something went wrong";
+        const errorMessage = error.response?.data?.message || "Something went wrong";
         toast.error(errorMessage);
         return thunkApi.rejectWithValue(errorMessage);
     }
 });
 
-const authSlice= createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
         logOutUser: (state, action) => {
-            const navigate= action.payload;
+            const navigate = action.payload;
             localStorage.removeItem("token");
-            state.loggedInUser= null;
+            state.loggedInUser = null;
             toast.info("Logged out successfully");
             navigate("/sign-in");
         },
         updateUser: (state, action) => {
-            const {name, email}= action.payload
-            if(state.loggedInUser){
-                state.loggedInUser.name= name;
-                state.loggedInUser.email= email;
+            const { name, email } = action.payload
+            if (state.loggedInUser) {
+                state.loggedInUser.name = name;
+                state.loggedInUser.email = email;
             }
         }
     },
     extraReducers: (builder) => {
         builder.addCase(signInUser.pending, (state) => {
-            state.loading= true;
+            state.loading = true;
         })
         .addCase(signInUser.fulfilled, (state) => {
-            state.loading= false;
+            state.loading = false;
         })
         .addCase(signInUser.rejected, (state) => {
-            state.loading= false;
+            state.loading = false;
         })
         .addCase(fetchUserDetails.pending, (state) => {
-            state.loading= true;
+            state.loading = true;
         })
         .addCase(fetchUserDetails.fulfilled, (state, action) => {
-            state.loggedInUser= action.payload;
-            state.loading= false;
+            state.loggedInUser = action.payload;
+            state.loading = false;
         })
         .addCase(fetchUserDetails.rejected, (state) => {
-            state.loading= false;
+            state.loading = false;
         });
     }
 });
 
-export const authReducer= authSlice.reducer;
-export const { logOutUser, updateUser }= authSlice.actions;
-export const selectLoggedInUser= (state: RootState) => state.auth.loggedInUser;
-export const selectLoading= (state: RootState) => state.auth.loading;
+export const authReducer = authSlice.reducer;
+export const { logOutUser, updateUser } = authSlice.actions;
+export const selectLoggedInUser = (state: RootState) => state.auth.loggedInUser;
+export const selectLoading = (state: RootState) => state.auth.loading;
