@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 interface LayoutProps {
-    children: ReactNode
+    children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

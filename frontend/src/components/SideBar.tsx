@@ -7,15 +7,15 @@ import { IoIosLogOut } from 'react-icons/io';
 import { fetchUserDetails, logOutUser } from '../reducers/auth/authReducer';
 
 const SideBar: React.FC = () => {
-    const [isOpen, setIsOpen]= useState<boolean>(false)
+    const [isOpen, setIsOpen]= useState<boolean>(false);
     const navigate= useNavigate();
     const dispatch= useDispatch<AppDispatch>();
     const toggleSideBar= () => {
-        setIsOpen((prev) => (!prev))
-    }
+        setIsOpen((prev) => (!prev));
+    };
     useEffect(() => {
-        dispatch(fetchUserDetails())        //displayed in UserProfile page
-    }, [])                                  //dependency array empty so called when component rendered for first time
+        dispatch(fetchUserDetails());        //displayed in UserProfile page
+    }, []);                                  //dependency array empty so called when component rendered for first time
     // Slidebar and navbar
     return (
         <>
