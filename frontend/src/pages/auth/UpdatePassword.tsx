@@ -5,33 +5,33 @@ import { toast } from 'sonner'
 import Layout from '../../components/Layout'
 
 interface UpdatePswdResponse {
-    success: boolean,
-    message: string
-}
+    success: boolean;
+    message: string;
+};
 
 const UpdatePassword: React.FC = () => {
-    const { token } = useParams<{ token: string }>()
-    const [password, setPassword] = useState<string>("")
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState<boolean>(false)
+    const { token } = useParams<{ token: string }>();
+    const [password, setPassword] = useState<string>("");
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState<boolean>(false);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
-            e.preventDefault()
-            setLoading(true)
-            const { data } = await backendApi.patch<UpdatePswdResponse>(`/api/v1/auth/update-password/${token}`, { password })
+            e.preventDefault();
+            setLoading(true);
+            const { data } = await backendApi.patch<UpdatePswdResponse>(`/api/v1/auth/update-password/${token}`, { password });
             if (data.success) {
-                toast.success(data.message)
-                navigate("/sign-in")
+                toast.success(data.message);
+                navigate("/sign-in");
             } else {
-                toast.warning(data.message)
-                navigate("/sign-up")
+                toast.warning(data.message);
+                navigate("/sign-up");
             }
         } catch (error) {
-            toast.error("Something went wrong")
+            toast.error("Something went wrong");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     return <Layout>
         <div className="p-4">
@@ -68,6 +68,6 @@ const UpdatePassword: React.FC = () => {
             </div> 
         </div>
     </Layout>
-}
+};
 
-export default UpdatePassword
+export default UpdatePassword;

@@ -62,13 +62,13 @@ const initialState: VideoState = {
     editVideo: null
 };
 
-export const fetchVideoForPublic = createAsyncThunk<
+export const fetchVideosForPublic = createAsyncThunk<
   IVideo[],
   void, 
   { rejectValue: string }
 >("/videos/fetch-public-videos", async (_, thunkApi) => {
     try {
-        const { data } = await backendApi.get<FileResponse>("/api/v1/azure/fetch-videos");
+        const { data } = await backendApi.get<FileResponse>("/api/v1/fetch-videos");
         if (data.success) {
             return data.videos || [];
         }
@@ -86,14 +86,14 @@ const videoSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchVideoForPublic.pending, (state) => {
+        builder.addCase(fetchVideosForPublic.pending, (state) => {
             state.isLoading = true;
         })
-        .addCase(fetchVideoForPublic.fulfilled, (state, action) => {
+        .addCase(fetchVideosForPublic.fulfilled, (state, action) => {
             state.publicVideos = action.payload;
             state.isLoading = false;
         })
-        .addCase(fetchVideoForPublic.rejected, (state) => {
+        .addCase(fetchVideosForPublic.rejected, (state) => {
             state.isLoading = false;
         });
     }
@@ -101,3 +101,4 @@ const videoSlice = createSlice({
 
 export const videoReducer = videoSlice.reducer;
 export const selectPublicVideos = (state: RootState) => state.video.publicVideos;
+export const selectVideoLoading = (state: RootState) => state.video.isLoading;

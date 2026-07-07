@@ -9,19 +9,19 @@ const SignUp: React.FC = () => {
   const [formData, setFormData]= useState<AuthFormData> ({
         email: "",
         password: "",
-    })
+    });
   const handleChange= (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value}= e.target
+    const {name, value}= e.target;
     setFormData((prev) => ({
         ...prev, 
         [name]: value,
-    }))
-  }
+    }));
+  };
   const dispatch= useDispatch<AppDispatch>();
   const handleSubmit= async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault()                              /*Prevent page refresh on submit*/
+    e.preventDefault();                              /*Prevent page refresh on submit*/
     dispatch(signUpuser(formData));
-  }
+  };
   return <Layout>
     <div className='flex items-center justify-center p-4 w-full'>
         <div className='w-full max-w-md bg-white rounded-lg shadow-lg p-6'>
@@ -52,6 +52,6 @@ const SignUp: React.FC = () => {
         </div>
     </div>
   </Layout>
-}
+};
 
-export default SignUp
+export default SignUp;

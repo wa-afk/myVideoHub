@@ -20,6 +20,8 @@
     "react-quill": "^2.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.12.0",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
@@ -27,6 +29,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
+    "@types/react-slick": "^0.23.13",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.23",
     "eslint": "^9.39.1",

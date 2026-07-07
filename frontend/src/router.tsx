@@ -6,12 +6,16 @@ import { ProtectedRoute, ProtectedRouteHome } from "./components/ProtectedRoute"
 import ResetPasswordEmail from "./pages/auth/ResetPasswordEmail";
 import UpdatePassword from "./pages/auth/UpdatePassword";
 import Upload from "./pages/user/Upload";
+import AllVideos from "./pages/AllVideos";
+import Home from "./pages/Home";
 
 export const router= createBrowserRouter ([
+    {path: '/', element: <Home />},
     {path: '/sign-up', element: <ProtectedRoute><SignUp /></ProtectedRoute>},
     {path: '/sign-in', element: <ProtectedRoute><SignIn /></ProtectedRoute>},
     {path: '/reset-password', element: <ProtectedRoute><ResetPasswordEmail /></ProtectedRoute>},
     {path: '/reset-password/:token', element: <ProtectedRoute><UpdatePassword /></ProtectedRoute>},
     {path: '/user/profile', element: <ProtectedRouteHome><UserProfile /></ProtectedRouteHome>},
-    {path: '/user/upload-video', element: <ProtectedRouteHome><Upload /></ProtectedRouteHome>}
-])
+    {path: '/user/upload-video', element: <ProtectedRouteHome><Upload /></ProtectedRouteHome>},
+    {path: '/all-videos', element: <ProtectedRouteHome><AllVideos /></ProtectedRouteHome>},
+]);

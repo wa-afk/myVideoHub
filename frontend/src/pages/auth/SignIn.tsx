@@ -7,27 +7,27 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectLoading, signInUser } from '../../reducers/auth/authReducer'
 
 const SignIn: React.FC = () => {
-  const loading= useSelector(selectLoading)
+  const loading= useSelector(selectLoading);
 
   const [formData, setFormData]= useState<AuthFormData> ({
         email: "",
         password: "",
-  })
+  });
   const handleChange= (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value}= e.target
+    const {name, value}= e.target;
     setFormData((prev) => ({
         ...prev, 
         [name]: value,
-    }))
-  }
+    }));
+  };
 
-  const dispatch= useDispatch<AppDispatch>()
-  const navigate= useNavigate()
+  const dispatch= useDispatch<AppDispatch>();
+  const navigate= useNavigate();
   const handleSubmit= async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault()                              /*Prevent page refresh on submit*/
+    e.preventDefault();                              /*Prevent page refresh on submit*/
     const {email, password}= formData;
-    dispatch(signInUser({email, password, navigate}))
-  }
+    dispatch(signInUser({email, password, navigate}));
+  };
   return <Layout>
     <div className='flex items-center justify-center p-4 w-full'>
         <div className='w-full max-w-md bg-white rounded-lg shadow-lg p-6'>
@@ -70,6 +70,6 @@ const SignIn: React.FC = () => {
         </div>
     </div>
   </Layout>
-}
+};
 
-export default SignIn
+export default SignIn;

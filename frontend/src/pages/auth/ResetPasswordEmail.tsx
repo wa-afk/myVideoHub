@@ -5,32 +5,32 @@ import backendApi from '../../api/backendApi';
 import { toast } from 'sonner';
 
 interface ResetResponse {
-    success: boolean, 
-    message: string
-}
+    success: boolean; 
+    message: string;
+};
 
 const ResetPasswordEmail: React.FC = () => {
-    const [email, setEmail] = useState<string>("")
-    const [loading, setLoading] = useState<boolean>(false)
-    const navigate = useNavigate()
+    const [email, setEmail] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
-            e.preventDefault()
-            setLoading(true)
-            const {data} = await backendApi.post<ResetResponse>("/api/v1/auth/reset-password", {email})
+            e.preventDefault();
+            setLoading(true);
+            const {data} = await backendApi.post<ResetResponse>("/api/v1/auth/reset-password", {email});
             if (data.success) {
-                toast.success(data.message)
-                navigate("/sign-in")
+                toast.success(data.message);
+                navigate("/sign-in");
             } else {
-                toast.warning(data.message)
-                navigate("/sign-in")
+                toast.warning(data.message);
+                navigate("/sign-in");
             }
         } catch (error) {     
-            toast.error("Something went wrong")
+            toast.error("Something went wrong");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    } 
+    }; 
 
     return <Layout>
         <div className="p-4">
@@ -67,6 +67,6 @@ const ResetPasswordEmail: React.FC = () => {
             </div> 
         </div>
     </Layout>
-}
+};
 
-export default ResetPasswordEmail
+export default ResetPasswordEmail;

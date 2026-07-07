@@ -4,6 +4,8 @@ import { router } from './router';
 import { Provider } from 'react-redux';
 import { store } from './reducers/store';
 import { Toaster } from 'sonner';
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
 
 // For notification we use Toaster
 const App : React.FC = () => {

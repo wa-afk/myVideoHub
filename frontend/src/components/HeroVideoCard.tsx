@@ -82,46 +82,50 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
                     className='text-white cursor-pointer hover:text-gray-300 transition duration-300'
                     onClick={handlePlayPause}
                     />
-                    {
+                    {isLoading? (
+                        <p className='text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-200'>
+                            Downloading ...
+                        </p>
+                    ) : (
                         <FaDownload
                           size={20}
                           className='text-white cursor-pointer absolute bottom-2 left-2 hover:text-gray-300 transition duration-300'
                         />
-                    }
+                    )}
                     <Link to={`/video/${video._id}`}>
                         <FaExternalLinkAlt
                           size={20} 
-                          className='text-blue-500 hover:text-blue-700 transition-colors duration-300'
+                          className='text-white cursor-pointer absolute top-2 right-2 hover:text-gray-300 transition duration-300'
                         />
                     </Link>
                     <div className='absolute z-10 top-2 left-2 cursor-pointer' onClick={handleShare}>
                         <FaShareAlt 
                           size={20}
-                          className='text-blue-500 hover:text-blue-700 transition-colors duration-300'
+                          className='text-blue-500 hover:text-blue-700 transition-colors duration-200'
                         />
                     </div>
                 </div>
             )}
-            <div className='detailsContainer px-2'>
-                <h2 className='text-lg font-semibold'>{video.title}</h2>
-                <div className='flex justify-center items-center'>
-                    <div className='text-gray-600 text-xs mb-1'>
-                        {video?.description? (
-                            <p className='truncate'> {parse(video.description)}</p>
-                        ) : (
-                            <p>Default Description</p>
-                        )}
-                        {duration>0 && (
-                            <div className='text-gray-500 text-xs flex items-center gap-2 pb-2'>
-                                <MdAccessTime size={30} />
-                                <p>{formatDuration(duration)}</p>
-                            </div>
-                        )}
-                    </div>
+        </div>
+        <div className='detailsContainer px-2'>
+            <h2 className='text-lg font-semibold'>{video.title}</h2>
+            <div className='userContainer flex justify-between items-center'>
+                <div className='text-gray-600 text-xs mb-1'>
+                    {video?.description? (
+                        <p className='truncate'> {parse(video?.description.substring(0, 100))}</p>
+                    ) : (
+                        <p>Default Description</p>
+                    )}
                 </div>
+                {duration>0 && (
+                    <div className='text-gray-500 text-xs flex items-center gap-2 pb-2'>
+                        <MdAccessTime className='text-lg' />
+                        <p>{formatDuration(duration)}</p>                        
+                    </div>
+                )}
             </div>
         </div>
     </div>
-}
+};
 
-export default HeroVideoCard
+export default HeroVideoCard;
