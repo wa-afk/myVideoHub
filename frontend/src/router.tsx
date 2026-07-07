@@ -8,9 +8,11 @@ import UpdatePassword from "./pages/auth/UpdatePassword";
 import Upload from "./pages/user/Upload";
 import AllVideos from "./pages/AllVideos";
 import Home from "./pages/Home";
+import SingleVideo from "./pages/SingleVideo";
 
 export const router= createBrowserRouter ([
     {path: '/', element: <Home />},
+    {path: '/video/:id', element: <SingleVideo />},
     {path: '/sign-up', element: <ProtectedRoute><SignUp /></ProtectedRoute>},
     {path: '/sign-in', element: <ProtectedRoute><SignIn /></ProtectedRoute>},
     {path: '/reset-password', element: <ProtectedRoute><ResetPasswordEmail /></ProtectedRoute>},

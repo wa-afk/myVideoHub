@@ -129,7 +129,7 @@ export const downloadVideo: RequestHandler = async (req,res) => {
         }
         const blockBlob = container.getBlockBlobClient(video.key);
         const downloadBlockBlobResponse = await blockBlob.download();
-        res.setHeader("Content-Disposition", `attachment;filename=${video.title}`);
+        res.setHeader("Content-Disposition", `attachment; filename="${video.title}.mp4"`);
         res.setHeader("Content-Type", downloadBlockBlobResponse.contentType || "video/mp4");
 
         const stream = downloadBlockBlobResponse.readableStreamBody;

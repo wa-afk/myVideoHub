@@ -10,6 +10,7 @@ const corsOptions= {
         "http://localhost:5173"
     ],
     optionSuceessStatus: 200,
+    exposedHeaders: ["Content-Disposition", "Content-Type"],
 }
 dotenv.config({ debug: false });
 const app= express();

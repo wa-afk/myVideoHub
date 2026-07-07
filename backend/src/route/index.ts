@@ -3,10 +3,11 @@ import authRoute from './authRoute';
 import userRoute from './userRoute';
 import azureFileRoute from './azureFileRoute'
 import passport from 'passport';
-import { downloadVideo, fetchVideos } from '../controller/azure/azureFileController';
+import { downloadVideo, fetchSingleVideo, fetchVideos } from '../controller/azure/azureFileController';
 
 const router= express.Router();
 router.get('/fetch-videos', fetchVideos);
+router.get('/fetch-single/video/:id', fetchSingleVideo);
 router.get("/download/file/:id", downloadVideo)
 router.use('/auth', authRoute);
 router.use('/user', passport.authenticate('jwt', {session: false}), userRoute);
