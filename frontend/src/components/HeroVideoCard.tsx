@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoggedInUser } from '../reducers/auth/authReducer'
 import type { AppDispatch } from '../reducers/store'
 import { downloadVideo, type IVideo } from '../reducers/video/videoReducer'
 import ReactPlayer from 'react-player'
@@ -19,7 +18,6 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [duration, setDuration] = useState<number>(0);
-    const loggedInUser = useSelector(selectLoggedInUser);
     const dispatch = useDispatch<AppDispatch>();
     const videoRef = useRef<HTMLVideoElement | null>(null);
     
@@ -88,7 +86,8 @@ const HeroVideoCard: React.FC<HeroVideoCardProps> = ({ video }) => {
 
             {!isPlaying && isHovered && (
                 <div className='absolute inset-0 bg-black bg-opacity-50 flex
-            flex-col justify-center items-center transition-opacity duration-300 '>
+                  flex-col justify-center items-center transition-opacity duration-300 '
+                >
                     <FaPlay
                     size={30} 
                     className='text-white cursor-pointer hover:text-gray-300 transition duration-300'

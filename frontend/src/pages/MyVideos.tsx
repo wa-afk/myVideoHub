@@ -3,8 +3,8 @@ import { fetchVideosForUser, selectUserVideos } from '../reducers/video/videoRed
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '../reducers/store';
 import { useConfig } from '../customHooks/useConfigHook';
-import HeroVideoCard from '../components/HeroVideoCard';
 import SideBar from '../components/SideBar';
+import VideoCard from '../components/VideoCard';
 
 const MyVideos: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +20,7 @@ const MyVideos: React.FC = () => {
         <section className='p-4 mt-3'>
             <div className='grid gap-3 grid-cols-1 md:grid-cols-2'>
                 {videos?.map((video) => (
-                    <HeroVideoCard key={video._id} video={video} />
+                    <VideoCard key={video._id} video={video} />
                 ))}
             </div>
         </section>

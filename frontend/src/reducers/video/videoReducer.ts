@@ -67,7 +67,7 @@ export const fetchVideosForUser = createAsyncThunk<
   IVideo[],
   FileFetchPayload, 
   { rejectValue: string }
->("/videos/fetch-user-videos", async (payload, thunkApi) => {
+>("/video/fetch-user-videos", async (payload, thunkApi) => {
     try {
         const { configWithJwt } = payload;
         const { data } = await backendApi.get<FileResponse>("/api/v1/azure/fetch-videos", configWithJwt);
@@ -87,7 +87,7 @@ export const fetchVideosForPublic = createAsyncThunk<
   IVideo[],
   void, 
   { rejectValue: string }
->("/videos/fetch-public-videos", async (_, thunkApi) => {
+>("/video/fetch-public-videos", async (_, thunkApi) => {
     try {
         const { data } = await backendApi.get<FileResponse>("/api/v1/fetch-videos");
         if (data.success) {
@@ -106,7 +106,7 @@ export const downloadVideo = createAsyncThunk<
   void,
   {id: string},
   {rejectValue: string}
->("/videos/download", async(payload, thunkApi) => {
+>("/video/download", async (payload, thunkApi) => {
     try {
         const { id } = payload;
         const state = thunkApi.getState() as RootState;
@@ -134,6 +134,25 @@ export const downloadVideo = createAsyncThunk<
     }
 });
 
+export const deleteVideo = createAsyncThunk<
+  {id: string},
+  {id: string; configWithJwt: ConfigWithJWT},
+  {rejectValue: string}
+>("/video/delete", async ({ id, configWithJwt }, thunkApi) => {
+    try {
+        const { data } = await backendApi.delete<SingleFileResponse>(`/api/v1/azure/delete-single/video/${id}`, configWithJwt);
+        if (data.success) {
+            return { id };
+        }
+        toast.warning(data.message);
+        return thunkApi.rejectWithValue(data.message);
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || "Something went wrong";
+        toast.error(errorMessage);
+        return thunkApi.rejectWithValue(errorMessage);
+    }
+});
+
 const videoSlice = createSlice({
     name: "video",
     initialState,
@@ -157,6 +176,10 @@ const videoSlice = createSlice({
         })
         .addCase(fetchVideosForUser.fulfilled, (state, action) => {
             state.videos = action.payload;
+            state.isLoading = false;
+        })
+        .addCase(deleteVideo.fulfilled, (state, action) => {
+            state.videos = state.videos?.filter((video) => video._id !== action.payload.id) || null;
             state.isLoading = false;
         });
     }
