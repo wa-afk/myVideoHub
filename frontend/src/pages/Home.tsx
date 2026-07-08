@@ -6,6 +6,8 @@ import Layout from '../components/Layout';
 import { FaPlay } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import VideoSlider from '../components/VideoSlider';
+import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from 'react-loading-skeleton';
 
 const Home: React.FC = () => {
     const publicVideos = useSelector(selectPublicVideos);
@@ -56,7 +58,15 @@ const Home: React.FC = () => {
         <h2 className='capitalize text-textTwo text-lg sm:text-2xl md:text-3xl lg:text-4xl mt-2 p-4'>
             Recently Added
         </h2>
-        <VideoSlider videos={publicVideos}/>
+        {isLoading? (
+          <div className='w-full flex justify-center'>
+            <Skeleton height={300} width={800} />
+          </div>
+        ) : (
+          <div className='p-4'>
+            <VideoSlider videos={publicVideos}/>
+          </div>
+        )}
     </main>
   </Layout>
 };

@@ -1,19 +1,24 @@
 import React, { type ReactNode } from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 interface LayoutProps {
     children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const token = localStorage.getItem("token");
   return (
     <div className='min-h-screen bg-bgTwo flex flex-col'>
       <nav className='flex items-center bg-bgFive p-4 justify-end md:text-lg border-b-black border-b-[1px] fixed top-0 z-50 w-full text-white'>
         <div className='flex items-center gap-3 md:gap-5 lg:gap-7 capitalize'>
-          <Link to={'/'}>Home</Link>
-          <Link to={'/all-videos'}>All Videos</Link>
-          <Link to={'/sign-in'}>Sign In</Link>
+          <NavLink to={'/'}>Home</NavLink>
+          <NavLink to={'/all-videos'}>All Videos</NavLink>
+          {token? (
+            <NavLink to={'/user/dashboard'}>Dashboard</NavLink>
+          ) : (
+            <NavLink to={'/sign-in'}>Sign In</NavLink>
+          )}
         </div>
       </nav>
     <main className='flex-1 flex flex-col items-center w-full mt-16'>

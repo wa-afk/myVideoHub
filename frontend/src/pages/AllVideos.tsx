@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '../reducers/store';
-import { fetchVideosForPublic, getSearchResults, selectPublicVideos, selectSearchResults } from '../reducers/video/videoReducer';
+import { fetchVideosForPublic, fetchVideosForUser, getSearchResults, selectPublicVideos, selectSearchResults, selectVideoLoading } from '../reducers/video/videoReducer';
 import HeroVideoCard from '../components/HeroVideoCard';
+import { useConfig } from '../customHooks/useConfigHook';
+import Skeleton from 'react-loading-skeleton';
 
 const AllVideos: React.FC = () => {
+    const token = localStorage.getItem("token");
+    const isLoading = useSelector(selectVideoLoading);
+    const { configWithJWT } = useConfig();
     const [query, setQuery] = useState<string>("");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchResults = useSelector(selectSearchResults);
@@ -13,6 +18,7 @@ const AllVideos: React.FC = () => {
     const publicVideos = useSelector(selectPublicVideos);
     useEffect(() => {
         if (searchTerm) {
+            if (token) dispatch(fetchVideosForUser({ configWithJwt: configWithJWT }));
             dispatch(getSearchResults(searchTerm));
         }
         dispatch(fetchVideosForPublic());
@@ -34,12 +40,18 @@ const AllVideos: React.FC = () => {
                     Search
                 </button>                    
             </div>
-            
+
             <div className='mt-7'>
                 {searchTerm? (
                     <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3'>
                         {searchResults?.map((video) => (
                             <HeroVideoCard key={video._id} video={video} />
+                        ))}
+                    </div>
+                ) : isLoading? (
+                    <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+                        {[...Array(8)].map((_, index) => (
+                            <Skeleton key={index} height={200} width={300} className='rounded-lg' />
                         ))}
                     </div>
                 ) : (
