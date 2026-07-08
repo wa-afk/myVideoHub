@@ -111,7 +111,7 @@ const SingleVideo: React.FC = () => {
               }`}
               style={{zIndex:isPlaying? 0: 1}}
             >
-                <ReactPlayer url={video.path} controls width={"100%"} height={"100%"}
+                <ReactPlayer url={video.path} light={video.thumbnail} width={"100%"} height={"100%"}
                   className='absolute top-0 left-0' playing={isPlaying}
                 />
                 {isPlaying && (

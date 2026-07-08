@@ -142,6 +142,7 @@ export const deleteVideo = createAsyncThunk<
     try {
         const { data } = await backendApi.delete<SingleFileResponse>(`/api/v1/azure/delete-single/video/${id}`, configWithJwt);
         if (data.success) {
+            toast.success(data.message);
             return { id };
         }
         toast.warning(data.message);
@@ -153,10 +154,51 @@ export const deleteVideo = createAsyncThunk<
     }
 });
 
+export const updateVideo = createAsyncThunk<
+  null,
+  {id: string; updateData: Partial<EditVideo>; configWithJwt: ConfigWithJWT},
+  {rejectValue: string}
+>("/video/update", async ({ id, updateData, configWithJwt }, thunkApi) => {
+    try {
+        const formData = new FormData();
+        if (updateData.path instanceof File) {
+            formData.append("video", updateData.path);
+        }
+        if (updateData.thumbnail instanceof File) {
+            formData.append("thumbnail", updateData.thumbnail);
+        }    
+        if (updateData.title) formData.append("title", updateData.title);
+        if (updateData.description) formData.append("description", updateData.description);
+        formData.append("isPrivate", String(updateData.isPrivate));
+        const { data } = await backendApi.put<SingleFileResponse>(
+            `/api/v1/azure/update-video/${id}`, 
+            formData, 
+            { ...configWithJwt, headers: {
+                ...configWithJwt.headers,
+                "Content-Type": "multipart/form-data",
+            }}
+        );
+        if (data.success && data.video) {
+            toast.success(data.message);
+        }
+        toast.warning(data.message);
+        return thunkApi.rejectWithValue(data.message);
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || "Something went wrong";
+        toast.error(errorMessage);
+        return thunkApi.rejectWithValue(errorMessage);
+    }
+});
+
+
 const videoSlice = createSlice({
     name: "video",
     initialState,
-    reducers: {},
+    reducers: {
+        setEditVideo: (state, action) => {
+            state.editVideo = action.payload;
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchVideosForPublic.pending, (state) => {
             state.isLoading = true;
@@ -186,6 +228,8 @@ const videoSlice = createSlice({
 });
 
 export const videoReducer = videoSlice.reducer;
+export const { setEditVideo } = videoSlice.actions;
 export const selectUserVideos = (state: RootState) => state.video.videos;
 export const selectPublicVideos = (state: RootState) => state.video.publicVideos;
 export const selectVideoLoading = (state: RootState) => state.video.isLoading;
+export const selectEditingVideo = (state: RootState) => state.video.editVideo;

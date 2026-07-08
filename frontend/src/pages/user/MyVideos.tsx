@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { fetchVideosForUser, selectUserVideos } from '../reducers/video/videoReducer';
+import { fetchVideosForUser, selectUserVideos } from '../../reducers/video/videoReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch } from '../reducers/store';
-import { useConfig } from '../customHooks/useConfigHook';
-import SideBar from '../components/SideBar';
-import VideoCard from '../components/VideoCard';
+import type { AppDispatch } from '../../reducers/store';
+import { useConfig } from '../../customHooks/useConfigHook';
+import SideBar from '../../components/SideBar';
+import VideoCard from '../../components/VideoCard';
 
 const MyVideos: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();

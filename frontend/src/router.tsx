@@ -9,7 +9,8 @@ import Upload from "./pages/user/Upload";
 import AllVideos from "./pages/AllVideos";
 import Home from "./pages/Home";
 import SingleVideo from "./pages/SingleVideo";
-import MyVideos from "./pages/MyVideos";
+import MyVideos from "./pages/user/MyVideos";
+import UpdateVideo from "./pages/user/UpdateVideo";
 
 export const router= createBrowserRouter ([
     {path: '/', element: <Home />},
@@ -21,5 +22,6 @@ export const router= createBrowserRouter ([
     {path: '/user/profile', element: <ProtectedRouteHome><UserProfile /></ProtectedRouteHome>},
     {path: '/user/upload-video', element: <ProtectedRouteHome><Upload /></ProtectedRouteHome>},
     {path: '/user/edit/my-videos', element: <ProtectedRouteHome><MyVideos /></ProtectedRouteHome>},
+    {path: '/user/edit/my-video', element: <ProtectedRouteHome><UpdateVideo /></ProtectedRouteHome>},
     {path: '/all-videos', element: <AllVideos />},
 ]);

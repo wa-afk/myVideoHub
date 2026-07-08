@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '../reducers/store'
-import { deleteVideo, downloadVideo, type IVideo } from '../reducers/video/videoReducer'
+import { deleteVideo, downloadVideo, setEditVideo, type IVideo } from '../reducers/video/videoReducer'
 import ReactPlayer from 'react-player'
-import { FaDownload, FaExternalLinkAlt, FaLock, FaPlay, FaShareAlt, FaTrash } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { FaDownload, FaEdit, FaExternalLinkAlt, FaLock, FaPlay, FaShareAlt, FaTrash } from 'react-icons/fa'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import parse from 'html-react-parser'
 import { FaChalkboardUser } from 'react-icons/fa6'
@@ -19,6 +19,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
+    const navigate = useNavigate();
     const { configWithJWT } = useConfig();
     const dispatch = useDispatch<AppDispatch>();
     
@@ -52,10 +53,14 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
     const handleDelete = async () => {
         try {
             await dispatch(deleteVideo({ id: _id, configWithJwt: configWithJWT}));
-            toast.success("Video deleted");
         } catch (error) {
             toast.error(`Failed to delete video`)
         }
+    };
+
+    const handleEditClick = () => {
+        dispatch(setEditVideo(video));
+        navigate("/user/edit/my-video");
     };
 
     return (
@@ -159,8 +164,9 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
                               type="button"
                               className='bg-green-500 text-white rounded-md p-2 text-sm hover:bg-opacity-90 transition
                               duration-200'
+                              onClick={handleEditClick}
                             >
-                                <FaTrash className='inline-block mr-1' /> Edit
+                                <FaEdit className='inline-block mr-1' /> Edit
                             </button>
                         </>
                     }
