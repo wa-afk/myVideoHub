@@ -190,6 +190,26 @@ export const updateVideo = createAsyncThunk<
     }
 });
 
+export const getSearchResults = createAsyncThunk<
+  IVideo[],
+  string,
+  {rejectValue: string; state: RootState}
+>("/video/search", async (query, thunkApi) => {
+    try {
+        const { publicVideos, videos } = thunkApi.getState().video;
+        const combinedVideos = [...(publicVideos || []), ...(videos || [])];
+        const filteredVideos = combinedVideos.filter(
+            (video) => 
+                video?.title?.toLowerCase().includes(query.toLocaleLowerCase()) ||
+                video?.description?.toLowerCase().includes(query.toLocaleLowerCase())
+        );
+        return filteredVideos;
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || "Something went wrong";
+        toast.error(errorMessage);
+        return thunkApi.rejectWithValue(errorMessage);
+    }
+});
 
 const videoSlice = createSlice({
     name: "video",
@@ -222,7 +242,9 @@ const videoSlice = createSlice({
         })
         .addCase(deleteVideo.fulfilled, (state, action) => {
             state.videos = state.videos?.filter((video) => video._id !== action.payload.id) || null;
-            state.isLoading = false;
+        })
+        .addCase(getSearchResults.fulfilled, (state, action) => {
+            state.searchResults = action.payload;
         });
     }
 });
@@ -233,3 +255,4 @@ export const selectUserVideos = (state: RootState) => state.video.videos;
 export const selectPublicVideos = (state: RootState) => state.video.publicVideos;
 export const selectVideoLoading = (state: RootState) => state.video.isLoading;
 export const selectEditingVideo = (state: RootState) => state.video.editVideo;
+export const selectSearchResults = (state: RootState) => state.video.searchResults;
