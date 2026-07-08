@@ -41,7 +41,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
     const handleDownload = async () => {
         try {
             setIsLoading(true);
-            await dispatch(downloadVideo({ id: _id })).unwrap();
+            await dispatch(downloadVideo({ id: _id }));
             toast.success("Video downloaded");
         } catch (error) {
             toast.error(`Failed to download video`)

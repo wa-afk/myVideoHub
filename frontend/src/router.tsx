@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import SingleVideo from "./pages/SingleVideo";
 import MyVideos from "./pages/user/MyVideos";
 import UpdateVideo from "./pages/user/UpdateVideo";
+import Dashboard from "./pages/user/Dashboard";
 
 export const router= createBrowserRouter ([
     {path: '/', element: <Home />},
@@ -20,6 +21,7 @@ export const router= createBrowserRouter ([
     {path: '/reset-password', element: <ProtectedRoute><ResetPasswordEmail /></ProtectedRoute>},
     {path: '/reset-password/:token', element: <ProtectedRoute><UpdatePassword /></ProtectedRoute>},
     {path: '/user/profile', element: <ProtectedRouteHome><UserProfile /></ProtectedRouteHome>},
+    {path: '/user/dashboard', element: <ProtectedRouteHome><Dashboard /></ProtectedRouteHome>},
     {path: '/user/upload-video', element: <ProtectedRouteHome><Upload /></ProtectedRouteHome>},
     {path: '/user/edit/my-videos', element: <ProtectedRouteHome><MyVideos /></ProtectedRouteHome>},
     {path: '/user/edit/my-video', element: <ProtectedRouteHome><UpdateVideo /></ProtectedRouteHome>},
