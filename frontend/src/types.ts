@@ -7,7 +7,6 @@ export interface AuthFormData {
 
 export interface ConfigWithJWT extends AxiosRequestConfig {
     headers: {
-        "content-type": string;
         Authorization: string;
     };
 };

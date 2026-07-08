@@ -38,7 +38,7 @@ export interface VideoState {
 
 // Payload Types
 interface FileFetchPayload {
-    config: ConfigWithJWT;
+    configWithJwt: ConfigWithJWT;
 };
 
 // Backend Api Response Types
@@ -61,6 +61,27 @@ const initialState: VideoState = {
     isLoading: false,
     editVideo: null
 };
+
+// Fetch videos for logged in user
+export const fetchVideosForUser = createAsyncThunk<
+  IVideo[],
+  FileFetchPayload, 
+  { rejectValue: string }
+>("/videos/fetch-user-videos", async (payload, thunkApi) => {
+    try {
+        const { configWithJwt } = payload;
+        const { data } = await backendApi.get<FileResponse>("/api/v1/azure/fetch-videos", configWithJwt);
+        if (data.success) {
+            return data.videos || [];
+        }
+        toast.warning(data.message);
+        return thunkApi.rejectWithValue(data.message);
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || "Something went wrong";
+        toast.error(errorMessage);
+        return thunkApi.rejectWithValue(errorMessage);
+    }
+});
 
 export const fetchVideosForPublic = createAsyncThunk<
   IVideo[],
@@ -111,7 +132,7 @@ export const downloadVideo = createAsyncThunk<
         const errorMessage = error.response?.data?.message || "Something went wrong";
         return thunkApi.rejectWithValue(errorMessage);
     }
-})
+});
 
 const videoSlice = createSlice({
     name: "video",
@@ -127,10 +148,21 @@ const videoSlice = createSlice({
         })
         .addCase(fetchVideosForPublic.rejected, (state) => {
             state.isLoading = false;
+        })
+        .addCase(fetchVideosForUser.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(fetchVideosForUser.rejected, (state) => {
+            state.isLoading = false;
+        })
+        .addCase(fetchVideosForUser.fulfilled, (state, action) => {
+            state.videos = action.payload;
+            state.isLoading = false;
         });
     }
 });
 
 export const videoReducer = videoSlice.reducer;
+export const selectUserVideos = (state: RootState) => state.video.videos;
 export const selectPublicVideos = (state: RootState) => state.video.publicVideos;
 export const selectVideoLoading = (state: RootState) => state.video.isLoading;
